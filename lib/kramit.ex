@@ -1,0 +1,2 @@
+defmodule Kramit do
+end
