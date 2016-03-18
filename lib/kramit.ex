@@ -1,6 +1,6 @@
 defmodule Kramit do
   @moduledoc """
-  #Kramit - A Pure Elixir Markdown SuperSet for HTML5
+  #Kramit - A Pure Elixir Markdown Superset for HTML5
 
   ###Rationale
   Markdown was originally created to ensure *good and smeantic markup* on the web during the era the HTML4 era. This has served the internet well and has overall improved the quailtity and accebiltiy of the web.
@@ -9,7 +9,7 @@ defmodule Kramit do
 
   Taking a queue from Kramdown[http://kramdown.gettalong.org/] we started adding additional syntax to make the web more usable and readable for us.
 
-  To that end the core value of Kramit is we want to add to the markdown spec, via Elixir, is to make the web a more beautiful, useable and modern place.
+  To that end the core value of Kramit is we want to add to the markdown spec, via Elixir, is to make the web a more beautiful, useable, and modern place.
 
 
   """
