@@ -33,24 +33,28 @@ defmodule Kramit.Html5Renderer do
   end
 
   defp process_meta_values({:scanning_toc, ["#endtoc" | rest], [checked_lines], [nav] }) do
-    process_meta_values({:find_end_of_doc_for_toc, [line | checked_lines], [nav])
+    process_meta_values({:find_end_of_doc_for_toc, [line | checked_lines], [nav]})
+  end
+
+  defp process_meta_values({:scanning_toc, [], [checked_lines], [nav] }) do
+    process_meta_values({:finish_scan_toc, [] , [ "#endtoc" | checked_lines], [nav]})
   end
 
   """
   Fast Forward
   """
   defp process_meta_values({:find_end_of_doc_for_toc, [line | rest], [checked_lines], [nav] }) do
-    process_meta_values({:find_end_of_doc_for_toc, rest , [line | checked_lines], [nav])
+    process_meta_values({:find_end_of_doc_for_toc, rest , [line | checked_lines], [nav]})
   end
 
   defp process_meta_values({:find_end_of_doc_for_toc, [], [checked_lines], [nav] }) do
-    process_meta_values({:scanning_toc, [] , [ "#endtoc" | checked_lines], [nav])
+    process_meta_values({:finish_scan_toc, [] , [checked_lines], [nav]})
   end
 
   """
   Finish Scan
   """
-  defp process_meta_values({:scanning_toc, [], [checked_lines], [nav] }) do
+  defp process_meta_values({:finish_scan_toc, [], [checked_lines], [nav] }) do
     toc = ["</nav>" | nav]
     |> Enum.reverse()
     process_meta_values({:building_toc, {:toc, toc}, [checked_lines], [] })
