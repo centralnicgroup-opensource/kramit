@@ -6,14 +6,14 @@ defmodule Kramit.Html5Renderer do
     |> recombine()
   end
 
-  defp process_meta_values() do
+  defp process_into_lines(markdown) do
     String.split(markdown, "\n", trim: true)
   end
 
   defp process_meta_values([line | rest], checked_lines) do
     cond do
-      has_toc?(line) -> parse_values({:scanning_toc, rest, [ line | checked_lines], ["<nav class="table-of-contents">\n"]})
-      true          -> parse_values(rest, [line | checked_lines])
+      has_toc?(line) -> parse_values({:scanning_toc, rest, [ line | checked_lines], ["<nav class=\"table-of-contents\">\n"]})
+      true           -> parse_values(rest, [line | checked_lines])
     end
   end
 
@@ -25,7 +25,7 @@ defmodule Kramit.Html5Renderer do
     handled_line = line
       |> String.downcase
       |> String.replace(" ", "-")
-    process_meta_values({:scanning_toc, rest, [ "## " <> line | checked_lines], [ "<li><a href=##{parsed_line}> #{line} </a></li>" | nav]})
+    process_meta_values({:scanning_toc, rest, [ "## " <> line | checked_lines], [ "<li><a href=\"##{handled_line}\"> #{line} </a></li>" | nav]})
   end
 
   defp process_meta_values({:scanning_toc, [line | rest], [checked_lines]}, [nav]) do
@@ -64,31 +64,32 @@ defmodule Kramit.Html5Renderer do
   Building toc state
   """
 
-  defp process_meta_values({:building_toc}, {:toc, toc}, ["#endtoc" | rest], [parsed_lines]) do
-    process_meta_values({:building_toc}, {:toc, toc}, [rest], [ "</section>" | parsed_lines])
+  defp process_meta_values({:building_toc, {:toc, toc}, ["#endtoc" | rest], [parsed_lines] }) do
+    process_meta_values({:building_toc, {:toc, toc}, [rest], [ "</section>" | parsed_lines] })
   end
 
-  defp process_meta_values({:building_toc}, {:toc, toc}, [<<"## ", h2_heading::binary>> | rest], [parsed_lines]) do
+  defp process_meta_values({:building_toc, {:toc, toc}, [<<"## ", h2_heading::binary>> | rest], [parsed_lines]}) do
     id = h2_heading
          |> String.downcase
          |> String.replace(" ", "-")
 
     cond do
-       is_first?(toc, id) -> table_of_contents_item = "<section id=##{id}>\n <h2>#{h2_heading}</h2>\n"
-       true               -> table_of_contents_item = "</section><section id=##{id}>\n <h2>#{h2_heading}</h2>\n"
+       is_first?(toc, id) -> table_of_contents_item = "<section id=\"##{id}\">\n <h2>#{h2_heading}</h2>\n"
+       true               -> table_of_contents_item = "</section>\n<section id=##{id}>\n <h2>#{h2_heading}</h2>\n"
     end
-    process_meta_values({:building_toc}, {:toc, toc}, [rest], [table_of_contents_item | parsed_lines])
+    process_meta_values({:building_toc, {:toc, toc}, [rest], [table_of_contents_item | parsed_lines]})
   end
 
-  defp process_meta_values({:building_toc}, {:toc, toc}, [line | rest], [parsed_lines]) do
-    process_meta_values({:building_toc}, {:toc, toc}, [rest], [line | parsed_lines])
+  defp process_meta_values({:building_toc, {:toc, toc}, [line | rest], [parsed_lines]}) do
+    html_line = Earmark.to_html(line)
+    process_meta_values({:building_toc, {:toc, toc}, [rest], [html_line | parsed_lines]})
   end
   """
   Inquistor functions
   """
 
   defp has_toc?(line) do
-    line = "#toc"
+    String.starts_with?(line, "#toc")
   end
 
   defp is_first?([ _ | toc_rest], id) do
