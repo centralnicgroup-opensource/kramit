@@ -14,6 +14,6 @@ defmodule Kramit do
 
   """
   def to_html(markdown)do
-    markdown
+    Kramit.Html5Renderer.render(markdown)
   end
 end
