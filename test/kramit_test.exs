@@ -2,7 +2,8 @@ defmodule KramitTest do
   use ExUnit.Case
   doctest Kramit
 
-  test "the truth" do
-    assert 1 + 1 == 2
+  test "doesn't touch normal markdown" do
+    result = Kramit.to_html("*stuff*\n")
+    assert result == "*stuff*\n"
   end
 end

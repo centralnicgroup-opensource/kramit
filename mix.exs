@@ -27,6 +27,9 @@ defmodule Kramit.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:earmark, "~> 0.2.1"}]
+    [
+      {:earmark, "~> 0.2.1"},
+      {:credo, "~> 0.3", only: [:dev, :test]}
+    ]
   end
 end

@@ -25,9 +25,9 @@ defmodule Kramit.Html5Renderer do
   defp recombine(lines) do
     List.to_string(lines)
   end
-  """
-  Scanning for toc state
-  """
+  ###
+  #Scanning for toc state
+  ###
   defp process_meta_values({:scanning_toc, [<<"## ", line::binary>> | rest], [checked_lines], [nav]}) do
     handled_line = line
       |> String.downcase
@@ -40,16 +40,16 @@ defmodule Kramit.Html5Renderer do
   end
 
   defp process_meta_values({:scanning_toc, ["#endtoc" | rest], [checked_lines], [nav] }) do
-    process_meta_values({:find_end_of_doc_for_toc, ["#endtoc" | checked_lines], [nav]})
+    process_meta_values({:find_end_of_doc_for_toc, rest,["#endtoc" | checked_lines], [nav]})
   end
 
   defp process_meta_values({:scanning_toc, [], [checked_lines], [nav] }) do
     process_meta_values({:finish_scan_toc, [] , [ "#endtoc" | checked_lines], [nav]})
   end
 
-  """
-  Fast Forward
-  """
+  ###
+  #Fast Forward
+  ###
   defp process_meta_values({:find_end_of_doc_for_toc, [line | rest], [checked_lines], [nav] }) do
     process_meta_values({:find_end_of_doc_for_toc, rest , [line | checked_lines], [nav]})
   end
@@ -58,9 +58,9 @@ defmodule Kramit.Html5Renderer do
     process_meta_values({:finish_scan_toc, [] , [checked_lines], [nav]})
   end
 
-  """
-  Finish Scan
-  """
+  ###
+  #Finish Scan
+  ###
   defp process_meta_values({:finish_scan_toc, [], [checked_lines], [nav] }) do
     toc = ["</nav>" | nav]
     |> Enum.reverse()
@@ -68,9 +68,9 @@ defmodule Kramit.Html5Renderer do
     process_meta_values({:building_toc, {:toc, toc}, [checked_lines], [] })
   end
 
-  """
-  Building toc state
-  """
+  ###
+  #Building toc state
+  ###
   defp process_meta_values({:building_toc, {:toc, toc}, ["#toc" | rest], [parsed_lines]}) do
     process_meta_values({:rewind, rest, [ toc | parsed_lines]})
   end
@@ -95,9 +95,9 @@ defmodule Kramit.Html5Renderer do
     process_meta_values({:building_toc, {:toc, toc}, rest, [html_line | parsed_lines]})
   end
 
-  """
-  Rewind
-  """
+  ###
+  # Rewind
+  ###
   defp process_meta_values ({:rewind, [head | rest], parsed_lines}) do
     process_meta_values({:rewind, rest, [head <> "\n"  | parsed_lines]})
   end
@@ -106,9 +106,9 @@ defmodule Kramit.Html5Renderer do
     parsed_lines
   end
 
-  """
-  Inquistor functions
-  """
+  ###
+  # Inquistor functions
+  ###
 
   defp has_toc?(line) do
     String.starts_with?(line, "#toc")
