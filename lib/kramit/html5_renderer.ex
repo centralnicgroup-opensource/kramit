@@ -24,12 +24,14 @@ defmodule Kramit.Html5Renderer do
 
   defp process_meta_values([], checked_lines) do
     IO.inspect checked_lines
-    process_meta_values {:rewind, checked_lines, []}
+    process_meta_values {:rewind, [], checked_lines}
   end
 
   defp recombine(lines) do
     List.to_string(lines)
   end
+
+
   ###
   #Scanning for toc state
   ###
@@ -107,8 +109,8 @@ defmodule Kramit.Html5Renderer do
     process_meta_values({:rewind, rest, [ head <> "\n"  | parsed_lines ]})
   end
 
-  defp process_meta_values({:rewind, [], [parsed_lines]}) do
-    parsed_lines
+  defp process_meta_values({:rewind, [], [head | rest]}) do
+    [ head <> "\n" | rest ]
   end
 
   ###
