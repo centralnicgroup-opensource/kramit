@@ -17,7 +17,7 @@ defmodule Kramit.Html5Renderer do
 
   defp process_meta_values([ line | rest ], checked_lines) do
     cond do
-      has_toc?(line) -> process_meta_values({:scanning_toc, rest, [ line | checked_lines ], [ "<nav class=\"table-of-contents\">\n" ]})
+      has_toc?(line) -> process_meta_values({:scanning_toc, rest, [ line | checked_lines ], [ "<nav id=\"table-of-contents\">\n" ]})
       true           -> process_meta_values(rest, [line | checked_lines])
     end
   end
@@ -35,7 +35,7 @@ defmodule Kramit.Html5Renderer do
   ###
   #Scanning for toc state
   ###
-  defp process_meta_values({:scanning_toc, [ <<"## ", line::binary>> | rest ], [checked_lines], nav}) do
+  defp process_meta_values({:scanning_toc, [ <<"## ", line::binary>> | rest ], checked_lines, nav}) do
     handled_line = line
       |> String.downcase
       |> String.replace(~r/\W/, "-")
@@ -57,22 +57,24 @@ defmodule Kramit.Html5Renderer do
   ###
   #Fast Forward
   ###
-  defp process_meta_values({:find_end_of_doc_for_toc, [line | rest], [checked_lines], [nav]}) do
-    process_meta_values({:find_end_of_doc_for_toc, rest , [line | checked_lines], [nav]})
+  defp process_meta_values({:find_end_of_doc_for_toc, [line | rest], checked_lines, nav}) do
+    process_meta_values({:find_end_of_doc_for_toc, rest , [line | checked_lines], nav})
   end
 
-  defp process_meta_values({:find_end_of_doc_for_toc, [], [checked_lines], [nav]}) do
-    process_meta_values({:finish_scan_toc, [] , [checked_lines], [nav]})
+  defp process_meta_values({:find_end_of_doc_for_toc, [], checked_lines, nav}) do
+    process_meta_values({:finish_scan_toc, [] , checked_lines, nav})
   end
 
   ###
   #Finish Scan
   ###
-  defp process_meta_values({:finish_scan_toc, [], [checked_lines], [nav]}) do
-    toc = ["</nav>" | nav]
-    |> Enum.reverse()
-    |> List.to_string()
-    process_meta_values({:building_toc, {:toc, toc}, [checked_lines], []})
+  defp process_meta_values({:finish_scan_toc, [], checked_lines, [nav]}) do
+    backwards_toc = ["</nav>" | nav]
+    IO.inspect backwards_toc 
+    toc = Enum.reverse(backwards_toc)
+          |> IO.inspect
+          |> List.to_string()
+    process_meta_values({:building_toc, {:toc, toc}, checked_lines, []})
   end
 
   ###
