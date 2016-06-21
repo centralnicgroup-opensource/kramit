@@ -70,9 +70,7 @@ defmodule Kramit.Html5Renderer do
   ###
   defp process_meta_values({:finish_scan_toc, [], checked_lines, [nav]}) do
     backwards_toc = ["</nav>" | nav]
-    IO.inspect backwards_toc 
     toc = Enum.reverse(backwards_toc)
-          |> IO.inspect
           |> List.to_string()
     process_meta_values({:building_toc, {:toc, toc}, checked_lines, []})
   end
