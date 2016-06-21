@@ -35,22 +35,22 @@ defmodule Kramit.Html5Renderer do
   ###
   #Scanning for toc state
   ###
-  defp process_meta_values({:scanning_toc, [ <<"## ", line::binary>> | rest ], [checked_lines], [nav]}) do
+  defp process_meta_values({:scanning_toc, [ <<"## ", line::binary>> | rest ], [checked_lines], nav}) do
     handled_line = line
       |> String.downcase
-      |> String.replace(" ", "-")
+      |> String.replace(~r/\W/, "-")
     process_meta_values({:scanning_toc, rest, [ "## " <> line | checked_lines ], [ "<li><a href=\"##{handled_line}\"> #{line} </a></li>" | nav ]})
   end
 
-  defp process_meta_values({:scanning_toc, [ line | rest ], [checked_lines]}, [nav]) do
-    process_meta_values({:scanning_toc, rest, [line | checked_lines], [nav]})
+  defp process_meta_values({:scanning_toc, [ line | rest ], checked_lines, nav}) do
+    process_meta_values({:scanning_toc, rest, [line | checked_lines], nav})
   end
 
-  defp process_meta_values({:scanning_toc, [ "#endtoc" | rest ], [checked_lines], [nav]}) do
-    process_meta_values({:find_end_of_doc_for_toc, rest,["#endtoc" | checked_lines], [nav]})
+  defp process_meta_values({:scanning_toc, [ "#endtoc" | rest ], checked_lines, nav}) do
+    process_meta_values({:find_end_of_doc_for_toc, rest,["#endtoc" | checked_lines], nav})
   end
 
-  defp process_meta_values({:scanning_toc, [], [checked_lines], [nav]}) do
+  defp process_meta_values({:scanning_toc, [], checked_lines, nav}) do
     process_meta_values({:finish_scan_toc, [] , [ "#endtoc" | checked_lines], [nav]})
   end
 
