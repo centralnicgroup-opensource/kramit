@@ -78,17 +78,17 @@ defmodule Kramit.Html5Renderer do
   ###
   #Building toc state
   ###
-  defp process_meta_values({:building_toc, {:toc, toc}, [ "#toc" | rest ], [parsed_lines]}) do
+  defp process_meta_values({:building_toc, {:toc, toc}, [ "#toc" | rest ], parsed_lines}) do
     process_meta_values({:rewind, rest, [ toc | parsed_lines ]})
   end
-  defp process_meta_values({:building_toc, {:toc, toc}, [ "#endtoc" | rest ], [parsed_lines]}) do
+  defp process_meta_values({:building_toc, {:toc, toc}, [ "#endtoc" | rest ], parsed_lines}) do
     process_meta_values({:building_toc, {:toc, toc}, rest, [ "</section>" | parsed_lines ]})
   end
 
-  defp process_meta_values({:building_toc, {:toc, toc}, [ <<"## ", h2_heading::binary>> | rest ], [ parsed_lines ]}) do
+  defp process_meta_values({:building_toc, {:toc, toc}, [ <<"## ", h2_heading::binary>> | rest ], parsed_lines}) do
     id = h2_heading
          |> String.downcase
-         |> String.replace(" ", "-")
+         |> String.replace(~r/\W/, "-")
 
     cond do
        is_first?(toc, id) -> table_of_contents_item = "<section id=\"##{id}\">\n <h2>#{h2_heading}</h2>\n"
@@ -97,7 +97,7 @@ defmodule Kramit.Html5Renderer do
     process_meta_values({:building_toc, {:toc, toc}, rest, [ table_of_contents_item | parsed_lines ]})
   end
 
-  defp process_meta_values({:building_toc, {:toc, toc}, [ line | rest ], [parsed_lines]}) do
+  defp process_meta_values({:building_toc, {:toc, toc}, [ line | rest ], parsed_lines}) do
     html_line = Earmark.to_html(line)
     process_meta_values({:building_toc, {:toc, toc}, rest, [ html_line | parsed_lines ]})
   end
@@ -121,9 +121,10 @@ defmodule Kramit.Html5Renderer do
     String.starts_with?(line, "#toc")
   end
 
-  defp is_first?([ _ | toc_rest ], id) do
+  defp is_first?(toc, id) do
     #super super junky must figure out better solution after moar coffee
-    <<"<li><a href=\"", rest::binary>> = hd(toc_rest)
+    toc_rest = String.split(toc, "\"") |> Enum.at(3)
+    <<"#", rest::binary>> = toc_rest
     String.starts_with?(rest, id)
   end
 end
