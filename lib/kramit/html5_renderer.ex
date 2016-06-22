@@ -82,7 +82,7 @@ defmodule Kramit.Html5Renderer do
     process_meta_values({:rewind, rest, [ toc | parsed_lines ]})
   end
   defp process_meta_values({:building_toc, {:toc, toc}, [ "#endtoc" | rest ], parsed_lines}) do
-    process_meta_values({:building_toc, {:toc, toc}, rest, [ "</section>" | parsed_lines ]})
+    process_meta_values({:building_toc, {:toc, toc}, rest, [ "</section>\n" | parsed_lines ]})
   end
 
   defp process_meta_values({:building_toc, {:toc, toc}, [ <<"## ", h2_heading::binary>> | rest ], parsed_lines}) do
