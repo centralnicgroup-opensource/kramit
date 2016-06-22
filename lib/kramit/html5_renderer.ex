@@ -23,7 +23,6 @@ defmodule Kramit.Html5Renderer do
   end
 
   defp process_meta_values([], checked_lines) do
-    IO.inspect checked_lines
     process_meta_values {:rewind, checked_lines, []}
   end
 
