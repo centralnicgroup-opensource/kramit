@@ -13,7 +13,42 @@ defmodule Kramit do
 
 
   """
+  #Public Interface
+  
   def to_html(markdown)do
-    Kramit.Html5Renderer.render(markdown)
+    render(markdown)
+  end
+
+  # Workhorse
+  defp render(markdown) do
+    markdown
+    |> process_into_lines()
+    |> process_meta_values([])
+    |> recombine()
+  end
+
+  defp process_into_lines(markdown) do
+    String.split(markdown, "\n", trim: true)
+  end
+
+  defp process_meta_values([ line | rest ], checked_lines) do
+    cond do
+      has_toc?(line) -> process_meta_values({:scanning_toc, rest, [ line | checked_lines ], [ "<nav id=\"table-of-contents\">\n" ]})
+      true           -> process_meta_values(rest, [line | checked_lines])
+    end
+  end
+
+  defp process_meta_values([], checked_lines) do
+    process_meta_values {:rewind, checked_lines, []}
+  end
+
+  defp recombine(lines) do
+    List.to_string(lines)
+  end
+
+  #Inquistor Functions
+
+  defp has_toc?(line) do
+    String.starts_with?(line, "#toc")
   end
 end
