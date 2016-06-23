@@ -14,7 +14,7 @@ defmodule Kramit do
 
   """
   #Public Interface
-  
+
   def to_html(markdown)do
     render(markdown)
   end
@@ -39,7 +39,8 @@ defmodule Kramit do
   end
 
   defp process_meta_values([], checked_lines) do
-    process_meta_values {:rewind, checked_lines, []}
+    #Don't like this name right now
+    Kramit.VCR.rewind(checked_lines, [])
   end
 
   defp recombine(lines) do
