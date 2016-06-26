@@ -1,9 +1,9 @@
 # Kramit - A Pure Elixir Markdown Superset for HTML5
 
 ###Rationale
-Markdown was originally created to ensure *good and smeantic markup* on the web during the era the HTML4 era. This has served the internet well and has overall improved the quailtity and accebiltiy of the web.
+Markdown was originally created to ensure *good and semantic markup* on the web during the era the HTML4 era. This has served the internet well and has overall improved the quality and accessibility of the web.
 
-In more recent times the HTML5 markup has pushed the web to even better symatic make up and also the bandwidth concerns of the web has increase the usage of such things as videos directly in Markup which are not really addressed by the Markdown spec.
+In the HTML5 era, markup has pushed the web to even better semantics and also the bandwidth availability has increased the usage of elements like videos directly in HTML; which was not really addressed by the original Markdown spec.
 
 Taking a queue from Kramdown[http://kramdown.gettalong.org/] we started adding additional syntax to make the web more usable and readable for us.
 
@@ -24,4 +24,3 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
         def application do
           [applications: [:kramit]]
         end
-
