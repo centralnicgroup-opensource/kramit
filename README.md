@@ -19,8 +19,22 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
           [{:kramit, "~> 0.0.1"}]
         end
 
-  2. Ensure kramit is started before your application:
 
-        def application do
-          [applications: [:kramit]]
-        end
+## Usage
+
+```elixir
+  Kramit.to_html(markdown)
+```
+
+## Features
+
+###Table of Contents
+
+Generate with this tag in your markdown document.
+```
+#toc
+```
+
+###Videos
+
+Coming soon

@@ -7,7 +7,11 @@ defmodule Kramit.Mixfile do
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps]
+     deps: deps,
+     package: package,
+     description: "A HTML5 focused Markdown superset",
+     source_url: "https://github.com/iwantmyname/kramit"
+    ]
   end
 
   # Configuration for the OTP application
@@ -31,5 +35,15 @@ defmodule Kramit.Mixfile do
       {:earmark, "~> 0.2.1"},
       {:credo, "~> 0.3", only: [:dev, :test]}
     ]
+  end
+
+  def package do
+    %{
+      maintainers: ["'Ley Missailidis"],
+      licenses: ["MIT"],
+      links: %{
+        "GitHub": "https://github.com/iwantmyname/kramit"
+      }
+    }
   end
 end
