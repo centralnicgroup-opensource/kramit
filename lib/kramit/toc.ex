@@ -10,7 +10,7 @@ defmodule Kramit.TOC do
    2. Make each an html section out of every inbetween space
    3. Give an id to each html section that has a 'handleized' version of the h2 title
    4. Inserts a nav element with the id *table-of-contents*
-  
+
   """
   #Public Interface
 
