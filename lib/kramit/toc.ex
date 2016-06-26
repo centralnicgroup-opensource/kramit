@@ -1,6 +1,15 @@
 defmodule Kramit.TOC do
 
   @moduledoc """
+  Core goal of this module is to contruct a table of contents automatically for long form writing.
+
+  The Markdown syntax for calling this is #toc
+
+  What this will do is:
+   1. Scan the document for any h2 headings
+   2. Make each an html section out of every inbetween space
+   3. Give an id to each html section that has a 'handleized' version of the h2 title
+   4. Inserts a nav element with the id *table-of-contents*
   
   """
   #Public Interface
