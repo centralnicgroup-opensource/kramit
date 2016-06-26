@@ -33,7 +33,8 @@ defmodule Kramit.Mixfile do
   defp deps do
     [
       {:earmark, "~> 0.2.1"},
-      {:credo, "~> 0.3", only: [:dev, :test]}
+      {:credo, "~> 0.3", only: [:dev, :test]},
+      {:ex_doc, "~> 0.11", only: :dev}
     ]
   end
 
