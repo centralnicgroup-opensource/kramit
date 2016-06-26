@@ -14,22 +14,22 @@ defmodule Kramit.TOC do
   ###
   #Scanning for toc state
   ###
-  def process_toc({:scanning_toc, [ <<"## ", line::binary>> | rest ], checked_lines, nav}) do
+  defp process_toc({:scanning_toc, [ <<"## ", line::binary>> | rest ], checked_lines, nav}) do
     handled_line = line
       |> String.downcase
       |> String.replace(~r/\W/, "-")
     process_toc({:scanning_toc, rest, [ "## " <> line | checked_lines ], [ "<li><a href=\"##{handled_line}\"> #{line} </a></li>" | nav ]})
   end
 
-  def process_toc({:scanning_toc, [ "#endtoc" | rest ], checked_lines, nav}) do
+  defp process_toc({:scanning_toc, [ "#endtoc" | rest ], checked_lines, nav}) do
     process_toc({:finish_scan_toc, rest,["#endtoc" | checked_lines], nav})
   end
 
-  def process_toc({:scanning_toc, [ line | rest ], checked_lines, nav}) do
+  defp process_toc({:scanning_toc, [ line | rest ], checked_lines, nav}) do
     process_toc({:scanning_toc, rest, [line | checked_lines], nav})
   end
 
-  def process_toc({:scanning_toc, [], checked_lines, nav}) do
+  defp process_toc({:scanning_toc, [], checked_lines, nav}) do
     process_toc({:finish_scan_toc, [] , [ "#endtoc" | checked_lines], [nav]})
   end
 
@@ -37,10 +37,10 @@ defmodule Kramit.TOC do
   ###
   #Finish Scan
   ###
-  def process_toc({:finish_scan_toc, [line | rest], checked_lines, nav}) do
+  defp process_toc({:finish_scan_toc, [line | rest], checked_lines, nav}) do
     process_toc({:finish_scan_toc, rest , [line | checked_lines], nav})
   end
-  def process_toc({:finish_scan_toc, [], checked_lines, [nav]}) do
+  defp process_toc({:finish_scan_toc, [], checked_lines, [nav]}) do
     backwards_toc = ["</nav>" | nav]
     toc = Enum.reverse(backwards_toc)
           |> List.to_string()
@@ -50,14 +50,14 @@ defmodule Kramit.TOC do
   ###
   #Building toc state
   ###
-  def process_toc({:building_toc, {:toc, toc}, [ "#toc" | rest ], parsed_lines}) do
+  defp process_toc({:building_toc, {:toc, toc}, [ "#toc" | rest ], parsed_lines}) do
     process_toc({:rewind, rest, [ toc | parsed_lines ]})
   end
-  def process_toc({:building_toc, {:toc, toc}, [ "#endtoc" | rest ], parsed_lines}) do
+  defp process_toc({:building_toc, {:toc, toc}, [ "#endtoc" | rest ], parsed_lines}) do
     process_toc({:building_toc, {:toc, toc}, rest, [ "</section>\n" | parsed_lines ]})
   end
 
-  def process_toc({:building_toc, {:toc, toc}, [ <<"## ", h2_heading::binary>> | rest ], parsed_lines}) do
+  defp process_toc({:building_toc, {:toc, toc}, [ <<"## ", h2_heading::binary>> | rest ], parsed_lines}) do
     id = h2_heading
          |> String.downcase
          |> String.replace(~r/\W/, "-")
@@ -69,7 +69,7 @@ defmodule Kramit.TOC do
     process_toc({:building_toc, {:toc, toc}, rest, [ table_of_contents_item | parsed_lines ]})
   end
 
-  def process_toc({:building_toc, {:toc, toc}, [ line | rest ], parsed_lines}) do
+  defp process_toc({:building_toc, {:toc, toc}, [ line | rest ], parsed_lines}) do
     html_line = Earmark.to_html(line)
     process_toc({:building_toc, {:toc, toc}, rest, [ html_line | parsed_lines ]})
   end
@@ -77,11 +77,11 @@ defmodule Kramit.TOC do
   ###
   # Rewind
   ###
-  def process_toc({:rewind, [ head | rest ], parsed_lines}) do
+  defp process_toc({:rewind, [ head | rest ], parsed_lines}) do
     process_toc({:rewind, rest, [ head <> "\n"  | parsed_lines ]})
   end
 
-  def process_toc({:rewind, [], parsed_lines }) do
+  defp process_toc({:rewind, [], parsed_lines }) do
     parsed_lines
   end
 
