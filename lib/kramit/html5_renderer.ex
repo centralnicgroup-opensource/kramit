@@ -3,6 +3,13 @@ defmodule Kramit.TOC do
   @moduledoc """
   
   """
+  #Public Interface
+
+  ###Also don't like this name
+  def start_toc(unchecked_lines, checked_lines) do
+    process_toc({:scanning_toc, unchecked_lines, checked_lines, [ "<nav id=\"table-of-contents\">\n" ]})
+  end
+
 
   ###
   #Scanning for toc state
@@ -14,12 +21,12 @@ defmodule Kramit.TOC do
     process_toc({:scanning_toc, rest, [ "## " <> line | checked_lines ], [ "<li><a href=\"##{handled_line}\"> #{line} </a></li>" | nav ]})
   end
 
-  def process_toc({:scanning_toc, [ line | rest ], checked_lines, nav}) do
-    process_toc({:scanning_toc, rest, [line | checked_lines], nav})
-  end
-
   def process_toc({:scanning_toc, [ "#endtoc" | rest ], checked_lines, nav}) do
     process_toc({:finish_scan_toc, rest,["#endtoc" | checked_lines], nav})
+  end
+
+  def process_toc({:scanning_toc, [ line | rest ], checked_lines, nav}) do
+    process_toc({:scanning_toc, rest, [line | checked_lines], nav})
   end
 
   def process_toc({:scanning_toc, [], checked_lines, nav}) do

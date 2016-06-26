@@ -33,7 +33,7 @@ defmodule Kramit do
 
   defp process_meta_values([ line | rest ], checked_lines) do
     cond do
-      has_toc?(line) -> Kramit.TOC.process_toc({:scanning_toc, rest, [ line | checked_lines ], [ "<nav id=\"table-of-contents\">\n" ]})
+      has_toc?(line) -> Kramit.TOC.start_toc( rest, [ line | checked_lines ])
       true           -> process_meta_values(rest, [line | checked_lines])
     end
   end
