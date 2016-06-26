@@ -46,7 +46,7 @@ defmodule KramitTest do
     """
   end
   ####
-  # To Do Tests
+  # To Do Tests for future additions to the spec
   ####
 
   #test video do
