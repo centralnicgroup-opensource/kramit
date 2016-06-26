@@ -71,11 +71,9 @@ defmodule Kramit.TOC do
          |> String.downcase
          |> String.replace(~r/\W/, "-")
 
-    cond do
-       is_first?(toc, id) -> table_of_contents_item = "<section id=\"##{id}\">\n <h2>#{h2_heading}</h2>\n"
-       true               -> table_of_contents_item = "</section>\n<section id=##{id}>\n <h2>#{h2_heading}</h2>\n"
-    end
-    process_toc({:building_toc, {:toc, toc}, rest, [ table_of_contents_item | parsed_lines ]})
+    section_heading = section_placement(toc, id, h2_heading)
+
+    process_toc({:building_toc, {:toc, toc}, rest, [ section_heading | parsed_lines ]})
   end
 
   defp process_toc({:building_toc, {:toc, toc}, [ line | rest ], parsed_lines}) do
@@ -94,6 +92,8 @@ defmodule Kramit.TOC do
     parsed_lines
   end
 
+
+
   ###
   # Inquistor functions
   ###
@@ -104,5 +104,17 @@ defmodule Kramit.TOC do
     toc_rest = String.split(toc, "\"") |> Enum.at(3)
     <<"#", rest::binary>> = toc_rest
     String.starts_with?(rest, id)
+  end
+
+
+  ###
+  # Miscellaneous
+  ###
+
+  defp section_placement(toc, id, h2_heading) do
+    cond do
+      is_first?(toc, id) -> "<section id=\"##{id}\">\n <h2>#{h2_heading}</h2>\n"
+      true               -> "</section>\n<section id=##{id}>\n <h2>#{h2_heading}</h2>\n"
+    end
   end
 end
