@@ -1,6 +1,7 @@
 # Kramit - A Pure Elixir Markdown Superset for HTML5
 
-###Rationale
+### Rationale
+
 Markdown was originally created to ensure *good and semantic markup* on the web during the era the HTML4 era. This has served the internet well and has overall improved the quality and accessibility of the web.
 
 In the HTML5 era, markup has pushed the web to even better semantics and also the bandwidth availability has increased the usage of elements like videos directly in HTML; which was not really addressed by the original Markdown spec.
@@ -28,13 +29,13 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
 ## Features
 
-###Table of Contents
+### Table of Contents
 
 Generate with this tag in your markdown document.
 ```
 #toc
 ```
 
-###Videos
+### Videos
 
 Coming soon
