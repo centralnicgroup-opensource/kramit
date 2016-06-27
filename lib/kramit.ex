@@ -1,8 +1,8 @@
 defmodule Kramit do
   @moduledoc """
-  #Kramit - A Pure Elixir Markdown Superset for HTML5
+  # Kramit - A Pure Elixir Markdown Superset for HTML5
 
-  ###Rationale
+  ### Rationale
   Markdown was originally created to ensure *good and smeantic markup* on the web during the era the HTML4 era. This has served the internet well and has overall improved the quailtity and accebiltiy of the web.
 
   In more recent times the HTML5 markup has pushed the web to even better symatic make up and also the bandwidth concerns of the web has increase the usage of such things as videos directly in Markup which are not really addressed by the Markdown spec.
