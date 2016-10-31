@@ -32,8 +32,9 @@ defmodule Kramit do
 
   defp process_meta_values([ line | rest ], checked_lines) do
     cond do
-      has_toc?(line) -> Kramit.TOC.start_toc( rest, [ line | checked_lines ])
-      true           -> process_meta_values(rest, [line | checked_lines])
+      has_definition?(line) -> Kramit.DefintionList.define(line, rest, checked_lines)
+      has_toc?(line)        -> Kramit.TOC.start_toc( rest, [ line | checked_lines ])
+      true                  -> process_meta_values(rest, [line | checked_lines])
     end
   end
 
@@ -47,6 +48,10 @@ defmodule Kramit do
   end
 
   #Inquistor Functions
+
+  defp has_definition?(line) do
+    String.starts_with?(line, ":")
+  end
 
   defp has_toc?(line) do
     String.starts_with?(line, "#toc")
