@@ -16,7 +16,7 @@ defmodule Kramit.TOC do
 
   ###Also don't like this name
   def start_toc(unchecked_lines, checked_lines) do
-    process_toc({:scanning_toc, unchecked_lines, checked_lines, [ "<nav id=\"table-of-contents\">\n" ]})
+    process_toc({:scanning_toc, unchecked_lines, checked_lines, [ ~s(<nav id="table-of-contents">\n) ]})
   end
 
 
@@ -27,7 +27,7 @@ defmodule Kramit.TOC do
     handled_line = line
       |> String.downcase
       |> String.replace(~r/\W/, "-")
-    process_toc({:scanning_toc, rest, [ "## " <> line | checked_lines ], [ "<li><a href=\"##{handled_line}\"> #{line} </a></li>" | nav ]})
+    process_toc({:scanning_toc, rest, [ "## " <> line | checked_lines ], [ ~s(<li><a href="##{handled_line}"> #{line} </a></li>) | nav ]})
   end
 
   defp process_toc({:scanning_toc, [ "#endtoc" | rest ], checked_lines, nav}) do
@@ -116,8 +116,8 @@ defmodule Kramit.TOC do
 
   defp section_placement(toc, id, h2_heading) do
     cond do
-      is_first?(toc, id) -> "<section id=\"##{id}\" >\n <h2>#{h2_heading}</h2>\n"
-      true               -> "</section>\n<section id=\"##{id}\">\n <h2>#{h2_heading}</h2>\n"
+      is_first?(toc, id) -> ~s(<section id="##{id}" >\n <h2>#{h2_heading}</h2>\n)
+      true               -> ~s(</section>\n<section id="##{id}">\n <h2>#{h2_heading}</h2>\n)
     end
   end
 end
