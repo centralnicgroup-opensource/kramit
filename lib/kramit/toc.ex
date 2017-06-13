@@ -62,6 +62,9 @@ defmodule Kramit.TOC do
   defp process_toc({:building_toc, {:toc, toc}, [ "#toc" | rest ], parsed_lines}) do
     process_toc({:rewind, rest, [ toc | parsed_lines ]})
   end
+  defp process_toc({:building_toc, {:toc, toc}, [], ["<p>#toc</p>\n"| parsed_lines]}) do
+    process_toc({:rewind, [], [ toc | parsed_lines ]})
+  end
   defp process_toc({:building_toc, {:toc, toc}, [ "#endtoc" | rest ], parsed_lines}) do
     process_toc({:building_toc, {:toc, toc}, rest, [ "</section>\n" | parsed_lines ]})
   end
@@ -113,8 +116,8 @@ defmodule Kramit.TOC do
 
   defp section_placement(toc, id, h2_heading) do
     cond do
-      is_first?(toc, id) -> "<section id=\"##{id}\">\n <h2>#{h2_heading}</h2>\n"
-      true               -> "</section>\n<section id=##{id}>\n <h2>#{h2_heading}</h2>\n"
+      is_first?(toc, id) -> "<section id=\"##{id}\" >\n <h2>#{h2_heading}</h2>\n"
+      true               -> "</section>\n<section id=\"##{id}\">\n <h2>#{h2_heading}</h2>\n"
     end
   end
 end
