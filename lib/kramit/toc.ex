@@ -116,8 +116,8 @@ defmodule Kramit.TOC do
 
   defp section_placement(toc, id, h2_heading) do
     cond do
-      is_first?(toc, id) -> ~s(<section id="##{id}" >\n <h2>#{h2_heading}</h2>\n)
-      true               -> ~s(</section>\n<section id="##{id}">\n <h2>#{h2_heading}</h2>\n)
+      is_first?(toc, id) -> ~s(<section id="#{id}" >\n <h2>#{h2_heading}</h2>\n)
+      true               -> ~s(</section>\n<section id="#{id}">\n <h2>#{h2_heading}</h2>\n)
     end
   end
 end
