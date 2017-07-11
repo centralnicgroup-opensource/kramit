@@ -3,7 +3,7 @@ defmodule Kramit.Mixfile do
 
   def project do
     [app: :kramit,
-     version: "0.0.1",
+     version: "0.0.2",
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -32,7 +32,7 @@ defmodule Kramit.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:earmark, "~> 0.2.1"},
+      {:earmark, ">= 0.2.1"},
       {:credo, "~> 0.3", only: [:dev, :test]},
       {:ex_doc, "~> 0.11", only: :dev}
     ]
